@@ -5,3 +5,13 @@ Content-Type: application/json
     "name": "Rishabh",
     "univ": "vit-vellore"
 }
+
+###
+POST http://localhost:3000/product
+Content-Type: application/json
+
+{
+    "name": "Rishabh",
+    "quantity": 2024,
+    "price": 200
+}

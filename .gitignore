@@ -1,3 +1,4 @@
 node_modules/
 public/cute-pic.jpg
 public/main.cpp
+.env
