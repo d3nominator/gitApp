@@ -15,7 +15,7 @@ app.set("view engine", "hbs");
 const path = require("path");
 const hbs = require("hbs");
 const tempelatePath = path.join(__dirname, "../tempelates");
-const partialsPath = path.join(__dirname,"../tempelates/partials") 
+const partialsPath = path.join(__dirname, "../tempelates/partials");
 const TextFile = require("../Models/FileModel");
 app.set("views", tempelatePath);
 require("dotenv").config();
@@ -38,7 +38,7 @@ app.listen(port || process.env.port, () => {
 });
 
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("home", { layout: "../tempelates/layout/main" });
 });
 
 app.get("/home", (req, res) => {
@@ -109,15 +109,14 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       console.error(err);
       res.status(500).json({ message: "Failed to read file" });
     } else {
-      // Send the file contents as the response
-      // console.log(Filedata);
       const writeFile = await TextFile.create({ content: data });
       // console.log(writeFile);
       console.log("Data inserted successfully:", writeFile.insertedId);
       Filedata += data;
-      res.setHeader("Content-Type", "text/plain; charset=utf-8");
-      res.setHeader("Content-Disposition", 'attachment; filename="data.txt"');
-      res.render({ Filedata });
+      // res.setHeader("Content-Type", "text/plain; charset=utf-8");
+      // res.setHeader("Content-Disposition", 'attachment; filename="data.txt"');
+      // res.render("home", { message:  data });
+      res.status(200).json({ message: "File Uploaded Successfully" });
       console.log(data);
     }
   });
@@ -137,3 +136,7 @@ app.get("/upload/:id", async (req, res) => {
 });
 
 app.get("/file/:id", async (req, res) => {});
+
+app.get("/newFile", (req, res) => {
+  res.render("newFile");
+});
