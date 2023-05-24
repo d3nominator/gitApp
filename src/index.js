@@ -13,15 +13,17 @@ app.use(express.json());
 const multer = require("multer");
 app.set("view engine", "hbs");
 const path = require("path");
+const hbs = require("hbs");
 const tempelatePath = path.join(__dirname, "../tempelates");
+const partialsPath = path.join(__dirname,"../tempelates/partials") 
 const TextFile = require("../Models/FileModel");
 app.set("views", tempelatePath);
 require("dotenv").config();
-const hbs = require("hbs");
+hbs.registerPartials(partialsPath);
 
 const port = process.env.PORT;
+
 const mongodbURL = process.env.mongodbUrl;
-// mongoose.set("strictQuery",false);
 mongoose
   .connect(mongodbURL)
   .then(() => {
@@ -36,9 +38,31 @@ app.listen(port || process.env.port, () => {
 });
 
 app.get("/", (req, res) => {
-  // res.send("Home Page");
-  const message = "Rishabh Kumar Pandey";
-  res.render("home", { message });
+  res.render("home");
+});
+
+app.get("/home", (req, res) => {
+  const messages = "Hello This is Rishabh Kumar Pandey";
+  res.render("home", { messages });
+});
+
+app.get("/about-me", (req, res) => {
+  res.render("about-me");
+});
+
+app.get("/all", async (req, res) => {
+  try {
+    const id = req.params.id;
+    // const product = await Product.();
+    const data = await TextFile.find();
+    for (Filenow of data) {
+      console.log(Filenow.content);
+    }
+    // console.log(data);
+    res.status(200).json({ Hi: "hi" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 app.get("/products/:id", async (req, res) => {
@@ -69,7 +93,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.post("/upload", upload.single("file") , async (req, res) => {
+app.post("/upload", upload.single("file"), async (req, res) => {
   if (!req.file) {
     res.status(400).send("No file Upload");
     return;
@@ -93,7 +117,7 @@ app.post("/upload", upload.single("file") , async (req, res) => {
       Filedata += data;
       res.setHeader("Content-Type", "text/plain; charset=utf-8");
       res.setHeader("Content-Disposition", 'attachment; filename="data.txt"');
-      res.status(200).send(data);
+      res.render({ Filedata });
       console.log(data);
     }
   });
@@ -108,7 +132,7 @@ app.get("/upload/:id", async (req, res) => {
     console.log("Found successfully");
     console.log(FileText.content);
   } catch (error) {
-    res.status(400).json({message : error.message});
+    res.status(400).json({ message: error.message });
   }
 });
 
