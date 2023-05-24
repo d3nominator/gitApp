@@ -7,11 +7,8 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3000/product
-Content-Type: application/json
+POST http://localhost:3000/upload
 
 {
-    "name": "Rishabh",
-    "quantity": 2024,
-    "price": 200
+    "file":"C:/Users/Rishabh kumar pandey/AppData/Roaming/Sublime Text 3/Packages/User/CF874/A.cpp"
 }
