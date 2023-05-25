@@ -1,12 +1,28 @@
-{{>header}}
-
-{{!-- //create a form which posts data to upload route and accepts a file input --}}
-
-{{message}}
-
-<form action="/upload" method="POST" enctype="multipart/form-data">
-  <label for="file">Upload Your File</label>
-  <input type="file" name="file" id="file"/>
-  <input type="submit" value="Upload"/>
-</form>
-
+{{!-- {{>header}} --}}
+<div class="hero">
+  <div class="hero-one"></div>
+  <div class="hero-two"></div>
+  <h1 class="header-title"><span class="header-primary">CodeSpace</span><span
+      class="header-sub"
+    >The Ultimate Code Library</span></h1>
+</div>
+<div class="container">
+  <div class="card">
+    <center>
+      <header>
+        <h4><strong>Select Your Files Here</strong></h4>
+      </header>
+    </center>
+    <div class="drop_box">
+      <center>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+          <label for="file"></label>
+          <input type="file" name="file" id="file" />
+          <div style="margin-top: 25px;">
+            <input type="submit" value="Upload" class="btn" />
+          </div>
+        </form>
+      </center>
+    </div>
+  </div>
+</div>

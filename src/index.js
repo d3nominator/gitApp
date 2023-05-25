@@ -1,5 +1,4 @@
 const express = require("express");
-const date = require("date-and-time");
 const bodyParser = require("body-parser");
 const env = require("dotenv");
 const app = express();
@@ -13,7 +12,9 @@ app.use(express.json());
 const multer = require("multer");
 app.set("view engine", "hbs");
 const path = require("path");
+
 const hbs = require("hbs");
+
 const tempelatePath = path.join(__dirname, "../tempelates");
 const partialsPath = path.join(__dirname, "../tempelates/partials");
 const TextFile = require("../Models/FileModel");
@@ -42,8 +43,10 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  const messages = "Hello This is Rishabh Kumar Pandey";
-  res.render("home", { messages });
+  const messages = "<pre>Hellow\n Rishahbh </pre>";
+  res.render("home", {
+    layout: "../tempelates/layout/main",
+  });
 });
 
 app.get("/about-me", (req, res) => {
@@ -53,12 +56,13 @@ app.get("/about-me", (req, res) => {
 app.get("/all", async (req, res) => {
   try {
     const id = req.params.id;
-    // const product = await Product.();
     const data = await TextFile.find();
+    let tempdata = "";
     for (Filenow of data) {
+      tempdata += filenow;
       console.log(Filenow.content);
     }
-    // console.log(data);
+    
     res.status(200).json({ Hi: "hi" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -75,9 +79,24 @@ app.get("/products/:id", async (req, res) => {
   }
 });
 
-app.get("/show", (req, res) => {
-  res.status(200);
-  res.send("Showing All the file uploaded to the databse");
+app.get("/show", async (req, res) => {
+  try {
+    const codeFiles = await TextFile.find({});
+    console.log(codeFiles.content);
+    let all = "";
+    for (dataField of codeFiles) {
+      // console.log(dataField.content);
+      if (dataField.content !== undefined) all += dataField.content;
+    }
+    const toRender = "<div><pre><code>" + all + "</code></pre></div>";
+    res.render("home", {
+      layout: "../tempelates/layout/main",
+      messages: toRender,
+    });
+    // res.status(200).json({ message: "found data successfully" });
+  } catch (error) {
+    res.status(500).json({ messages: error.message });
+  }
 });
 
 const storage = multer.diskStorage({
@@ -98,11 +117,11 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     res.status(400).send("No file Upload");
     return;
   }
-
   const originalFileName = req.file.originalname;
   const savedFilename = req.file.filename;
   const filepath = req.file.path;
   let Filedata = "";
+  console.log(originalFileName, savedFilename, filepath);
 
   fs.readFile(filepath, "utf8", async (err, data) => {
     if (err) {
@@ -110,13 +129,14 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       res.status(500).json({ message: "Failed to read file" });
     } else {
       const writeFile = await TextFile.create({ content: data });
-      // console.log(writeFile);
       console.log("Data inserted successfully:", writeFile.insertedId);
       Filedata += data;
-      // res.setHeader("Content-Type", "text/plain; charset=utf-8");
-      // res.setHeader("Content-Disposition", 'attachment; filename="data.txt"');
-      // res.render("home", { message:  data });
-      res.status(200).json({ message: "File Uploaded Successfully" });
+      const toRender = "<pre>" + data + "</pre>";
+      res.render("uploaded", {
+        layout: "../tempelates/layout/main",
+        messages: toRender,
+        Filename: req.file.originalname,
+      });
       console.log(data);
     }
   });
@@ -134,8 +154,6 @@ app.get("/upload/:id", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
-app.get("/file/:id", async (req, res) => {});
 
 app.get("/newFile", (req, res) => {
   res.render("newFile");
