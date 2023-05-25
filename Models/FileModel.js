@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 
 const textFileSchema = new mongoose.Schema({
-
-  content: String
+  content: String,
+  UploadedFileName: String,
+  FileTags: [String],
 });
 
 const TextFile = mongoose.model("TextFile", textFileSchema);

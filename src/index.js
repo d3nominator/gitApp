@@ -43,7 +43,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", (req, res) => {
-  const messages = "<pre>Hellow\n Rishahbh </pre>";
   res.render("home", {
     layout: "../tempelates/layout/main",
   });
@@ -58,12 +57,17 @@ app.get("/all", async (req, res) => {
     const id = req.params.id;
     const data = await TextFile.find();
     let tempdata = "";
-    for (Filenow of data) {
-      tempdata += filenow;
-      console.log(Filenow.content);
+    let arr = [];
+    for (const Filenow of data) {
+      if (Filenow.content != undefined) {
+        let tempFile = Filenow;
+        arr.push(tempFile);
+      }
     }
-    
-    res.status(200).json({ Hi: "hi" });
+    res.render("all", {
+      layout: "../tempelates/layout/main",
+      arrOfCode: arr,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -120,6 +124,10 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   const originalFileName = req.file.originalname;
   const savedFilename = req.file.filename;
   const filepath = req.file.path;
+  console.log("below are the files");
+  console.log(req.body.tags);
+  let tagData = req.body.tags;
+  let tagArray = tagData.split(",");
   let Filedata = "";
   console.log(originalFileName, savedFilename, filepath);
 
@@ -128,8 +136,12 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       console.error(err);
       res.status(500).json({ message: "Failed to read file" });
     } else {
-      const writeFile = await TextFile.create({ content: data });
-      console.log("Data inserted successfully:", writeFile.insertedId);
+      await TextFile.create({
+        content: data,
+        UploadedFileName: originalFileName,
+        FileTags: tagArray,
+      });
+      console.log("Data inserted successfully:");
       Filedata += data;
       const toRender = "<pre>" + data + "</pre>";
       res.render("uploaded", {
