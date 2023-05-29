@@ -1,23 +1,27 @@
-<ul>
-  {{#each arrOfCode}}
-    <div style="padding-left: 25vw; padding-right: 25vw">
-      <center>
-        <div>
-          <strong>
-            <h3>File Name :</h3>
-          </strong>
-          {{this.UplodedFileName}}
-        </div>
-      </center>
+<div style="margin-top: 100px;">
+  <ol>
+    {{#each arr}}
       <div
-        style="border: 1px solid black; padding-left: 5px ; padding-right: 5px; padding-top: 5px; padding-bottom: 5px"
+        style="padding-left: 25vw; padding-right: 25vw; padding-top: 80px padding-bottom: 30px"
       >
         <center>
-          <div style="text-align: left;">
-            <pre>{{{this.content}}}</pre>
+          <div>
+            <strong>
+              File Name :
+            </strong>
+            {{{this.UploadedFileName}}}
           </div>
         </center>
+        <div
+          style="border: 2px solid rgb(0, 0, 0); padding-left: 5px ; padding-right: 5px; padding-top: 5px; padding-bottom: 5px"
+        >
+          <center>
+            <div style="text-align: left;">
+              <pre><code>{{{this.content}}}</code></pre>
+            </div>
+          </center>
+        </div>
       </div>
-    </div>
-  {{/each}}
-</ul>
+    {{/each}}
+  </ol>
+</div>

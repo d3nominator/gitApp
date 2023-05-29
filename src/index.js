@@ -12,9 +12,7 @@ app.use(express.json());
 const multer = require("multer");
 app.set("view engine", "hbs");
 const path = require("path");
-
 const hbs = require("hbs");
-
 const tempelatePath = path.join(__dirname, "../tempelates");
 const partialsPath = path.join(__dirname, "../tempelates/partials");
 const TextFile = require("../Models/FileModel");
@@ -23,7 +21,6 @@ require("dotenv").config();
 hbs.registerPartials(partialsPath);
 
 const port = process.env.PORT;
-
 const mongodbURL = process.env.mongodbUrl;
 mongoose
   .connect(mongodbURL)
@@ -54,52 +51,19 @@ app.get("/about-me", (req, res) => {
 
 app.get("/all", async (req, res) => {
   try {
-    const id = req.params.id;
     const data = await TextFile.find();
-    let tempdata = "";
     let arr = [];
     for (const Filenow of data) {
       if (Filenow.content != undefined) {
-        let tempFile = Filenow;
-        arr.push(tempFile);
+        arr.push(Filenow);
       }
     }
     res.render("all", {
       layout: "../tempelates/layout/main",
-      arrOfCode: arr,
+      arr: arr,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
-  }
-});
-
-app.get("/products/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const product = await Product.findById(id);
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-app.get("/show", async (req, res) => {
-  try {
-    const codeFiles = await TextFile.find({});
-    console.log(codeFiles.content);
-    let all = "";
-    for (dataField of codeFiles) {
-      // console.log(dataField.content);
-      if (dataField.content !== undefined) all += dataField.content;
-    }
-    const toRender = "<div><pre><code>" + all + "</code></pre></div>";
-    res.render("home", {
-      layout: "../tempelates/layout/main",
-      messages: toRender,
-    });
-    // res.status(200).json({ message: "found data successfully" });
-  } catch (error) {
-    res.status(500).json({ messages: error.message });
   }
 });
 
@@ -116,6 +80,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
+
 app.post("/upload", upload.single("file"), async (req, res) => {
   if (!req.file) {
     res.status(400).send("No file Upload");
@@ -124,10 +90,10 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   const originalFileName = req.file.originalname;
   const savedFilename = req.file.filename;
   const filepath = req.file.path;
-  console.log("below are the files");
-  console.log(req.body.tags);
   let tagData = req.body.tags;
   let tagArray = tagData.split(",");
+  const fileExtension = req.file.filename.split(".").pop();
+  tagArray.push(fileExtension);
   let Filedata = "";
   console.log(originalFileName, savedFilename, filepath);
 
@@ -141,7 +107,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         UploadedFileName: originalFileName,
         FileTags: tagArray,
       });
-      console.log("Data inserted successfully:");
+
       Filedata += data;
       const toRender = "<pre>" + data + "</pre>";
       res.render("uploaded", {
@@ -149,24 +115,14 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         messages: toRender,
         Filename: req.file.originalname,
       });
-      console.log(data);
     }
   });
-});
 
-app.get("/upload/:id", async (req, res) => {
-  const id = req.params.id;
-  console.log(id);
-  try {
-    const FileText = await TextFile.findById(id);
-    res.send("Hellow");
-    console.log("Found successfully");
-    console.log(FileText.content);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-app.get("/newFile", (req, res) => {
-  res.render("newFile");
+  // delete the current file from uploads folder
+  fs.unlink(filepath, (err) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+  });
 });

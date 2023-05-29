@@ -42,8 +42,8 @@
       text-decoration: none; background-color: #ffffff; color: #005af0; padding:
       10px 20px; border: none; outline: 1px solid #010101; } .form input {
       margin: 10px 0; width: 100%; background-color: #e2e2e2; border: none;
-      outline: none; padding: 12px 20px; border-radius: 4px; }
-
+      outline: none; padding: 12px 20px; border-radius: 4px; } <link
+      href="https://{{cdn}}/prismjs@v1.x/themes/prism.css" rel="stylesheet" />
     </style>
     <script defer>
       const dropArea = document.querySelector(".drop_box"), button =
@@ -61,6 +61,12 @@
       href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+
+    <link rel="stylesheet" type="text/css" href="css/prism.css" />
 
     {{! <link rel="stylesheet" type="text/css" href="./main.css"/> }}
 
@@ -68,8 +74,12 @@
 
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Navbar w/ text</a>
+    <nav class="navbar fixed-top navbar-dark bg-dark">
+      <a
+        class="navbar-brand"
+        href="#"
+        style="padding-left: 10px; padding-right: 10px"
+      ><strong>CS</strong></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -84,19 +94,28 @@
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home
+            <a class="nav-link" href="#"><strong>Home</strong>
               <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
+            <a class="nav-link" href="#"><strong>Features</strong> </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
+            <a class="nav-link" href="#"><strong>Contribution</strong> </a>
           </li>
         </ul>
-        <span class="navbar-text">
-          Navbar text with an inline element
-        </span>
+
+        <form class="form-inline">
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-secondary" type="button" type="submit">
+            Search</button>
+        </form>
+
       </div>
     </nav>
 
@@ -110,6 +129,13 @@
     ></script>
     <script
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    ></script>
+
+    <script
+      src="https://{{cdn}}/prismjs@v1.x/components/prism-core.min.js"
+    ></script>
+    <script
+      src="https://{{cdn}}/prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js"
     ></script>
   </body>
 </html>
