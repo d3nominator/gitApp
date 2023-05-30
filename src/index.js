@@ -16,9 +16,63 @@ const hbs = require("hbs");
 const tempelatePath = path.join(__dirname, "../tempelates");
 const partialsPath = path.join(__dirname, "../tempelates/partials");
 const TextFile = require("../Models/FileModel");
+app.use(express.static(path.join(__dirname, "public")));
 app.set("views", tempelatePath);
 require("dotenv").config();
 hbs.registerPartials(partialsPath);
+
+(function (d) {
+  var mL = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  var mS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  d.prototype.getLongMonth = d.getLongMonth = function getLongMonth(inMonth) {
+    return gM.call(this, inMonth, mL);
+  };
+
+  d.prototype.getShortMonth = d.getShortMonth = function getShortMonth(
+    inMonth
+  ) {
+    return gM.call(this, inMonth, mS);
+  };
+
+  function gM(inMonth, arr) {
+    var m;
+
+    if (this instanceof d) {
+      m = this.getMonth();
+    } else if (typeof inMonth !== "undefined") {
+      m = parseInt(inMonth, 10) - 1; // Subtract 1 to start January at zero
+    }
+
+    return arr[m];
+  }
+})(Date);
 
 const port = process.env.PORT;
 const mongodbURL = process.env.mongodbUrl;
@@ -39,22 +93,28 @@ app.get("/", (req, res) => {
   res.render("home", { layout: "../tempelates/layout/main" });
 });
 
-app.get("/home", (req, res) => {
-  res.render("home", {
-    layout: "../tempelates/layout/main",
-  });
+app.get("/about-me", (req, res) => {
+  res.render("about-me" , { layout: "../tempelates/layout/main"} );
 });
 
-app.get("/about-me", (req, res) => {
-  res.render("about-me");
-});
+app.get("/search", (req, res) => {});
 
 app.get("/all", async (req, res) => {
   try {
     const data = await TextFile.find();
     let arr = [];
-    for (const Filenow of data) {
+    let dateDate = "";
+    let dateMonth = "";
+    let dateYear = "";
+    for (let Filenow of data) {
+      const date = new Date(Filenow.createdAt);
+      dateDate = date.getDate();
+      dateMonth = date.getShortMonth();
+      dateYear = date.getFullYear();
       if (Filenow.content != undefined) {
+        Filenow.dateDate = dateDate;
+        Filenow.dateMonth = dateMonth;
+        Filenow.dateYear = dateYear;
         arr.push(Filenow);
       }
     }
@@ -79,8 +139,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
-
 
 app.post("/upload", upload.single("file"), async (req, res) => {
   if (!req.file) {
@@ -118,7 +176,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     }
   });
 
-  // delete the current file from uploads folder
   fs.unlink(filepath, (err) => {
     if (err) {
       console.error(err);

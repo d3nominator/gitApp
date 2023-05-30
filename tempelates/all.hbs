@@ -1,27 +1,54 @@
-<div style="margin-top: 100px;">
-  <ol>
+ <script src="javascript/main.js"></script>
+
+<div style="margin-top: 100px; margin-bottom: 100px;">
     {{#each arr}}
       <div
         style="padding-left: 25vw; padding-right: 25vw; padding-top: 80px padding-bottom: 30px"
       >
-        <center>
-          <div>
-            <strong>
-              File Name :
-            </strong>
-            {{{this.UploadedFileName}}}
-          </div>
-        </center>
         <div
-          style="border: 2px solid rgb(0, 0, 0); padding-left: 5px ; padding-right: 5px; padding-top: 5px; padding-bottom: 5px"
+          style="border: 2px solid rgb(0, 0, 0); padding-left: 5px ; margin-right: 5px; padding-top: 5px; padding-bottom: 5px; padding-top: 10px; margin-top: 10px;"
         >
           <center>
-            <div style="text-align: left;">
-              <pre><code>{{{this.content}}}</code></pre>
-            </div>
+            <h5>
+              <strong>
+                {{{this.UploadedFileName}}}
+              </strong>
+            </h5>
+             <hr style="height:1px;border-width:0;color:gray;background-color:gray">
+              <details>
+              <summary>File Content</summary>
+              <p>
+              <strong style="text-align: left;">
+                <pre style="text-align: left;">{{this.content}}</pre>
+              </strong>
+              </p>              
+              </details>
+            <td style="display: flex; flex-direction: row; ">
+              {{!-- <pre><code>{{{this.content}}}</code></pre> --}}
+              <hr  style="height:1px;border-width:0;color:gray;background-color:gray">
+              <strong>
+              <span>
+                {{{this.dateDate}}}
+              </span>
+              <span style="margin-left :3px"> 
+                {{{this.dateMonth}}}
+              </span>
+              <span style="margin-left: 3px;">
+                {{{this.dateYear}}}
+              </span>
+              </strong>
+               <div class="vr"></div>
+              <hr  style="height:1px;border-width:0;color:gray;background-color:gray">
+              <ul style="display: flex; flex-direction: row; list-style-type: none">
+                {{#each this.FileTags}}
+                  <li style="margin-left: 8px;"><h6>{{this}}</h6> </li>
+                {{/each}}
+              <span/>
+            <td/>
           </center>
+
         </div>
       </div>
     {{/each}}
-  </ol>
+    
 </div>

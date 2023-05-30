@@ -6,36 +6,31 @@
       class="header-sub"
     >The Ultimate Code Library</span></h1>
 </div>
-
 <center style="margin-top: 100px; margin-bottom: 100px">
-
   <div class="drop_box card border-dark mb-5" style="max-width: 40rem; ">
-
-    <div
-      class="card-header bg-transparent border-success"
-      style="padding-top: 10px;"
-    >
+    <div class="card-header border-success" style="padding-top: 10px;">
       <h5><strong>Upload Your Files : </strong></h5>
     </div>
     <div style="padding-top: 13px;">
       <form action="/upload" method="POST" enctype="multipart/form-data">
-        <label for="file"></label>
-        <input
-          type="file"
-          name="file"
-          id="file"
-          type=".cpp,.java,.html,.js,.tsx,.ts,.py,.json"
-        />
+        <div style="padding-left: 85px;">
+          <label for="file"></label>
+          <input
+            type="file"
+            name="file"
+            id="file"
+            type=".cpp,.java,.html,.js,.tsx,.ts,.py,.json"
+          />
+        </div>
         <div style="margin-top: 20px; margin-bottom:10px ">
           <label for="tags"><strong>Enter Tags : </strong>(Comma Separated)</label>
           <text type="string" name="tags" id="tags" />
           <input type="string" id="tags" name="tags" />
         </div>
-        <div style="margin-top: 10px;">
-          <input type="submit" value="Upload" class="btn" />
+        <div style="margin-top: 0px; padding-bottom: 10px; padding-right: 10px">
+          <input type="submit" value="submit" class="btn btn-outline-primary" />
         </div>
       </form>
     </div>
   </div>
-
 </center>
