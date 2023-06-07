@@ -103,32 +103,28 @@ app.get("/search", (req, res) => {
 
 app.post("/search", async (req, res) => {
   try {
-    console.log(req.body.search);
-    const data = await TextFile.find({
-      FileTags: { $in: [req.body.search] },
-    }).limit(10);
+    const searchElements = req.body.search.split(",");
     let arr = [];
-    let dateDate = "";
-    let dateMonth = "";
-    let dateYear = "";
-    for (let Filenow of data) {
-      console.log(Filenow.createdAt);
-      const date = new Date(Filenow.createdAt);
-      dateDate = date.getDate();
-      dateMonth = date.getShortMonth();
-      dateYear = date.getFullYear();
-      console.log(dateDate);
-      console.log(dateMonth);
-      console.log(dateYear);
-
-      if (Filenow.content != undefined) {
-        Filenow.dateDate = dateDate;
-        Filenow.dateMonth = dateMonth;
-        Filenow.dateYear = dateYear;
-        arr.push(Filenow);
+    for (let i = 0; i < searchElements.length; i++) {
+      searchElements[i] = searchElements[i].trim();
+      const data = await TextFile.find({
+        FileTags: { $in: [searchElements[i]] },
+      }).limit(10);
+      for (let Filenow of data) {
+        if (Filenow.content != undefined) {
+          const timestamp = Filenow.createdAt;
+          const date = new Date(timestamp);
+          const monthId = date.getShortMonth(); // Month is zero-based, so we add 1 to get the correct value
+          const month = date.getShortMonth(monthId); // Month is zero-based, so we add 1 to get the correct value
+          const day = date.getDate();
+          const year = date.getFullYear();
+          Filenow.dateMonth = month;
+          Filenow.dateDate = day;
+          Filenow.dateYear = year;
+          arr.push(Filenow);
+        }
       }
     }
-    console.log(arr);
     res.render("all", {
       layout: "../tempelates/layout/main",
       arr: arr,
