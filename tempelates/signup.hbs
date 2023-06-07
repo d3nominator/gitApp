@@ -1,0 +1,74 @@
+<div
+  class="rounded border border-dark"
+  style="margin-top: 20vh; margin-bottom: 20vh; margin-left: 30vw; margin-right: 30vw;"
+>
+  <div class="container">
+    <div class="registration mx-auto d-block w-100">
+      <div class="page-header text-center">
+        <h3><strong>Sign up </strong> </h3>
+      </div>
+      <hr />
+      <form
+        id="member-registration"
+        action="/astroidnew/index.php/pages/register?task=registration.register"
+        method="post"
+        class="form-validate form-horizontal well"
+        enctype="multipart/form-data"
+      >
+        <fieldset>
+          <h5><strong> User Registration </strong> </h5>
+          <hr />
+          <div class="form-group">
+            <label for="exampleInputPassword1">Name *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputPassword1"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInputPassword1">Username *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="exampleInputPassword1"
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password *</label>
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Confirm Password *</label>
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email Address *</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" />
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Confirm Email Address *</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" />
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="form-group d-flex justify-content-start">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            <div class="form-check form-group d-flex justify-content-end">
+              <a href="#">Sign in instead</a>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
