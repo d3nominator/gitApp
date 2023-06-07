@@ -94,14 +94,53 @@ app.get("/", (req, res) => {
 });
 
 app.get("/about-me", (req, res) => {
-  res.render("about-me" , { layout: "../tempelates/layout/main"} );
+  res.render("about-me", { layout: "../tempelates/layout/main" });
 });
 
-app.get("/search", (req, res) => {});
+app.get("/search", (req, res) => {
+  res.render("search", { layout: "../tempelates/layout/main" });
+});
+
+app.post("/search", async (req, res) => {
+  try {
+    console.log(req.body.search);
+    const data = await TextFile.find({
+      FileTags: { $in: [req.body.search] },
+    }).limit(10);
+    let arr = [];
+    let dateDate = "";
+    let dateMonth = "";
+    let dateYear = "";
+    for (let Filenow of data) {
+      console.log(Filenow.createdAt);
+      const date = new Date(Filenow.createdAt);
+      dateDate = date.getDate();
+      dateMonth = date.getShortMonth();
+      dateYear = date.getFullYear();
+      console.log(dateDate);
+      console.log(dateMonth);
+      console.log(dateYear);
+
+      if (Filenow.content != undefined) {
+        Filenow.dateDate = dateDate;
+        Filenow.dateMonth = dateMonth;
+        Filenow.dateYear = dateYear;
+        arr.push(Filenow);
+      }
+    }
+    console.log(arr);
+    res.render("all", {
+      layout: "../tempelates/layout/main",
+      arr: arr,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 app.get("/all", async (req, res) => {
   try {
-    const data = await TextFile.find();
+    const data = await TextFile.find().limit(5);
     let arr = [];
     let dateDate = "";
     let dateMonth = "";
@@ -152,7 +191,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   let tagArray = tagData.split(",");
   const fileExtension = req.file.filename.split(".").pop();
   tagArray.push(fileExtension);
-  let Filedata = "";
   console.log(originalFileName, savedFilename, filepath);
 
   fs.readFile(filepath, "utf8", async (err, data) => {
@@ -165,7 +203,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         UploadedFileName: originalFileName,
         FileTags: tagArray,
       });
-
+      let Filedata = "";
       Filedata += data;
       const toRender = "<pre>" + data + "</pre>";
       res.render("uploaded", {
@@ -182,4 +220,12 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       return;
     }
   });
+});
+
+app.get("/login", (req, res) => {
+  res.render("login", { layout: "../tempelates/layout/main" });
+});
+
+app.get("/signup", (req, res) => {
+  res.render("signup", { layout: "../tempelates/layout/main" });
 });
