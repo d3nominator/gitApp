@@ -2289,3 +2289,23 @@ a:hover {
 .fa-fonticons:before {
   content: "\f280";
 }
+
+
+
+/* code editor css */
+
+.editor-container {
+  width: 630px;
+  height: 850px;
+  margin:20px auto;
+  position: relative;
+}
+
+#editor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
