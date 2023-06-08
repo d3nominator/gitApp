@@ -2309,3 +2309,12 @@ a:hover {
   height: 100%;
   width: 100%;
 }
+
+#editor_copy {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
