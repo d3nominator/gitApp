@@ -1,12 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const env = require("dotenv");
 const app = express();
 app.use("/static", express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const { default: mongoose, mongo } = require("mongoose");
-const Product = require("../Models/ProductModels");
 const fs = require("fs");
 app.use(express.json());
 const multer = require("multer");
@@ -14,12 +12,10 @@ app.set("view engine", "hbs");
 const path = require("path");
 const hbs = require("hbs");
 const tempelatePath = path.join(__dirname, "../tempelates");
-const partialsPath = path.join(__dirname, "../tempelates/partials");
 const TextFile = require("../Models/FileModel");
 app.use(express.static(path.join(__dirname, "public")));
 app.set("views", tempelatePath);
 require("dotenv").config();
-hbs.registerPartials(partialsPath);
 
 (function (d) {
   var mL = [
@@ -194,6 +190,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       console.error(err);
       res.status(500).json({ message: "Failed to read file" });
     } else {
+      console.log(data);
       await TextFile.create({
         content: data,
         UploadedFileName: originalFileName,
@@ -201,7 +198,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       });
       let Filedata = "";
       Filedata += data;
-      const toRender = "<pre>" + data + "</pre>";
+      const toRender = data;
       res.render("uploaded", {
         layout: "../tempelates/layout/main",
         messages: toRender,
