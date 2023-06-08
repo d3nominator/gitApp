@@ -2290,15 +2290,13 @@ a:hover {
   content: "\f280";
 }
 
-
-
 /* code editor css */
 
 .editor-container {
-  width: 630px;
-  height: 850px;
-  margin:10px auto;
   position: relative;
+  width: 670px;
+  height: 850px;
+  margin: auto;
 }
 
 #editor {
@@ -2306,15 +2304,7 @@ a:hover {
   left: 0;
   top: 0;
   bottom: 0;
-  height: 100%;
-  width: 100%;
-}
-
-#editor_copy {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
+  right: 0;
   height: 100%;
   width: 100%;
 }
