@@ -1,4 +1,3 @@
-
 <div style="margin-top: 100px; margin-bottom: 100px;">
     {{#each arr}}
       <div
@@ -16,15 +15,18 @@
              <hr style="height:1px;border-width:0;color:gray;background-color:gray">
               <details>
               <summary>File Content</summary>
-              <p>
               <strong style="text-align: left;">
                 <pre style="text-align: left;">{{this.content}}</pre>
               </strong>
-              </p>              
+              {{!-- <div class="editor-container">
+                <div id="editor">
+                  {{{this.content}}}
+                </div>
+              </div>             --}}
               </details>
             <td style="display: flex; flex-direction: row; ">
               {{!-- <pre><code>{{{this.content}}}</code></pre> --}}
-              <hr  style="height:1px;border-width:0;color:gray;background-color:gray">
+              <hr style="height:1px;border-width:0;color:gray;background-color:gray">
               <strong>
               <span>
                 {{{this.dateDate}}}
@@ -49,5 +51,4 @@
         </div>
       </div>
     {{/each}}
-   <button onclick="myFunction()">CLick</button> 
 </div>
