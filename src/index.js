@@ -1,3 +1,6 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
@@ -10,90 +13,64 @@ app.use(express.json());
 const multer = require("multer");
 app.set("view engine", "hbs");
 const path = require("path");
-const hbs = require("hbs");
 const tempelatePath = path.join(__dirname, "../tempelates");
 const TextFile = require("../Models/FileModel");
+const { User } = require("../Models/Users");
 app.use(express.static(path.join(__dirname, "public")));
 app.set("views", tempelatePath);
-require("dotenv").config();
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+const flash = require("connect-flash");
+const methodOverride = require("method-override");
+const expressSession = require("express-session");
 
-(function (d) {
-  var mL = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  var mS = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "June",
-    "July",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+const {
+  initializingPassport,
+  ensureAuthenticated,
+  ensureNotAuthenticated,
+} = require("./passport-config.js");
 
-  d.prototype.getLongMonth = d.getLongMonth = function getLongMonth(inMonth) {
-    return gM.call(this, inMonth, mL);
-  };
+initializingPassport(passport);
 
-  d.prototype.getShortMonth = d.getShortMonth = function getShortMonth(
-    inMonth
-  ) {
-    return gM.call(this, inMonth, mS);
-  };
+let months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+  "Aug",
+  "Sept",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
-  function gM(inMonth, arr) {
-    var m;
-
-    if (this instanceof d) {
-      m = this.getMonth();
-    } else if (typeof inMonth !== "undefined") {
-      m = parseInt(inMonth, 10) - 1; // Subtract 1 to start January at zero
-    }
-
-    return arr[m];
-  }
-})(Date);
+app.use(methodOverride("_method"));
 
 const port = process.env.PORT;
-const mongodbURL = process.env.mongodbUrl;
-mongoose
-  .connect(mongodbURL)
-  .then(() => {
-    console.log("Connected to mongodb");
-  })
-  .catch((err) => {
-    console.log(err.message);
-  });
-
 app.listen(port || process.env.port, () => {
   console.log(`server running on port ${port}`);
 });
+const mongodbURL = process.env.mongodbUrl;
+const connectDb = async () =>
+  await mongoose
+    .connect(mongodbURL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      console.log("Connected to mongodb");
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 
-app.get("/", (req, res) => {
-  res.render("home", { layout: "../tempelates/layout/main" });
-});
+connectDb();
 
 app.get("/about-me", (req, res) => {
   res.render("about-me", { layout: "../tempelates/layout/main" });
 });
 
-app.get("/search", (req, res) => {
+app.get("/search", ensureAuthenticated, (req, res) => {
   res.render("search", { layout: "../tempelates/layout/main" });
 });
 
@@ -107,18 +84,14 @@ app.post("/search", async (req, res) => {
         FileTags: { $in: [searchElements[i]] },
       }).limit(10);
       for (let Filenow of data) {
-        if (Filenow.content != undefined) {
-          const timestamp = Filenow.createdAt;
-          const date = new Date(timestamp);
-          const monthId = date.getShortMonth(); // Month is zero-based, so we add 1 to get the correct value
-          const month = date.getShortMonth(monthId); // Month is zero-based, so we add 1 to get the correct value
-          const day = date.getDate();
-          const year = date.getFullYear();
-          Filenow.dateMonth = month;
-          Filenow.dateDate = day;
-          Filenow.dateYear = year;
-          arr.push(Filenow);
-        }
+        const date = new Date(Filenow.createdAt);
+        dateDate = date.getDate();
+        dateMonth = date.getMonth();
+        dateYear = date.getFullYear();
+        Filenow.dateDate = dateDate;
+        Filenow.dateMonth = months[dateMonth];
+        Filenow.dateYear = dateYear;
+        arr.push(Filenow);
       }
     }
     res.render("all", {
@@ -130,24 +103,20 @@ app.post("/search", async (req, res) => {
   }
 });
 
-app.get("/all", async (req, res) => {
+app.get("/all", ensureAuthenticated, async (req, res) => {
   try {
     const data = await TextFile.find().limit(5);
     let arr = [];
-    let dateDate = "";
-    let dateMonth = "";
-    let dateYear = "";
     for (let Filenow of data) {
+      console.log(Filenow.createdAt);
       const date = new Date(Filenow.createdAt);
       dateDate = date.getDate();
-      dateMonth = date.getShortMonth();
+      dateMonth = date.getMonth();
       dateYear = date.getFullYear();
-      if (Filenow.content != undefined) {
-        Filenow.dateDate = dateDate;
-        Filenow.dateMonth = dateMonth;
-        Filenow.dateYear = dateYear;
-        arr.push(Filenow);
-      }
+      Filenow.dateDate = dateDate;
+      Filenow.dateMonth = months[dateMonth];
+      Filenow.dateYear = dateYear;
+      arr.push(Filenow);
     }
     res.render("all", {
       layout: "../tempelates/layout/main",
@@ -166,7 +135,10 @@ const storage = multer.diskStorage({
     console.log(req.method);
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     // console.log(path.extname(file.originalname));
-    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)); // Specify the filename
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    ); // Specify the filename
   },
 });
 
@@ -216,10 +188,76 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   });
 });
 
-app.get("/login", (req, res) => {
-  res.render("login", { layout: "../tempelates/layout/main" });
+app.get("/login", ensureNotAuthenticated, (req, res) => {
+  res.render("login", { layout: "../tempelates/layout/main"});
 });
 
-app.get("/signup", (req, res) => {
+app.use(
+  expressSession({
+    cookie: { maxAge: 60000 },
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/home",
+    failureRedirect: "/login",
+  })
+);
+
+app.get("/signup", ensureNotAuthenticated, (req, res) => {
   res.render("signup", { layout: "../tempelates/layout/main" });
 });
+
+app.post("/signup", async (req, res) => {
+  let { strname, username, password, email } = req.body;
+  console.log(req.body);
+  bcrypt.hash(password, 10, async function (err, hash) {
+    try {
+      password = hash;
+      const user = await User.create({
+        strname,
+        username,
+        password,
+        email,
+      });
+      console.log(user);
+      res.redirect("/login");
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({ message: error.message });
+    }
+  });
+});
+
+// app.get("/logout", ensureNotAuthenticated ,(req, res) => {
+//   req.logout();
+//   res.redirect("/");
+// });
+
+app.get("/profile", ensureAuthenticated, (req, res) => {
+  res.render("profile", { layout: "../tempelates/layout/main" });
+});
+
+app.get("/", (req, res) => {
+  res.render("home-before-login", { layout: "../tempelates/layout/main" });
+});
+
+app.get("/home", ensureAuthenticated, (req, res) => {
+  res.render("home-after-login", { layout: "../tempelates/layout/main" });
+});
+
+app.delete("/logout", ensureNotAuthenticated, (req, res) => {
+  req.logout();
+  res.redirect("/login");
+});
+

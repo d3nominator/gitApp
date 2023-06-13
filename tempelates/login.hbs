@@ -4,46 +4,52 @@
 >
   <div class="container">
     <div class="registration mx-auto d-block w-100">
-      <div class="page-header text-center">
+      <div class="page-header text-center" style="padding-top: 5px;">
         <h3><strong>Sign In </strong> </h3>
       </div>
       <hr />
-      <form
-        id="member-registration"
-        action="/astroidnew/index.php/pages/register?task=registration.register"
-        method="post"
-        class="form-validate form-horizontal well"
-        enctype="multipart/form-data"
-      >
+      <form action="/login" method="post">
         <fieldset>
-          <h5><strong> User Login </strong> </h5>
+          <h5><strong>User Login</strong> </h5>
           <hr />
+          {{#if messages}}
+          <div class="alert alert-danger" role="alert">
+            {{messages}}
+          </div>
+          {{/if}}
+          
+
 
           <div class="form-group">
-            <label for="exampleInputPassword1">Username *</label>
+            <label for="username"><strong>Username *</strong> </label>
             <input
               type="text"
               class="form-control"
-              id="exampleInputPassword1"
+              id="username"
+              name="username"
             />
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Password *</label>
+            <label for="password"><strong>Password *</strong></label>
             <input
               type="password"
               class="form-control"
-              id="exampleInputPassword1"
+              id="password"
+              name="password"
             />
           </div>
-          <div class="form-group d-flex" style="display: flex; justify-content: space-between ">
-            <div>
+          <div
+            class="d-flex justify-content-between align-items-center"
+            style="padding-top: 1px;"
+          >
+            <div class="form-group d-flex justify-content-start">
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
             <div class="form-check form-group d-flex justify-content-end">
-              <a href="#"> Sign Up Instead </a>
+              <button class="btn btn-primary" style="text-color: white;"><a
+                  href="/signup"
+                >Sign Up instead</a></button>
             </div>
-          </div>
-
           </div>
         </fieldset>
       </form>

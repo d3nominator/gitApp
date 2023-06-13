@@ -1,67 +1,70 @@
 <!DOCTYPE html> 
 <head>
-
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap"
   />
-  <link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-  />
-
- 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js' defer crossorigin='anonymous'></script>
   <link rel="stylesheet" href="./static/main.css" />
-
   <title> CodeSpaces </title>
-
 </head>
 <body>
 
-  <nav class="navbar fixed-top navbar-dark bg-dark">
-    <a
-      class="navbar-brand"
-      href="#"
-      style="padding-left: 10px; padding-right: 10px"
-    ><strong>CS</strong></a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarText"
-      aria-controls="navbarText"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#"><strong>Home</strong>
-            <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><strong>Features</strong> </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><strong>Contribution</strong> </a>
-        </li>
-      </ul>
-      <form class="form-inline">
-        <input
-          class="form-control mr-sm-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button class="btn btn-outline-secondary" type="button" type="submit">
-          Search</button>
-      </form>
-    </div>
-  </nav>
+<div>
+  <nav class="navbar navbar-dark navbar-expand-sm bg-dark fixed-top">
+        <div class="container">
+        <a href="/" class="navbar-brand">
+        <i class="fas fa-blog"></i> &nbsp;
+             Code Spaces
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="/home" class="nav-link active">
+                    Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="" class="nav-link active">
+                    Blog
+                </a>
+            </li>
 
-  <div class="alignCenter">
+            <li class="nav-item">
+             <a href="/search" class="nav-link active">
+                Search
+              </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a href="/about-me" class="nav-link active">
+                    About
+                </a>
+            </li>
+            <li>
+              <a href="/profile" class="nav-link active">
+                Profile
+              </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/signup" class="nav-link active">
+                    login / signup
+                </a>
+            </li>
+        </ul>
+        </div>
+
+    </div>
+</div>
+  
+  <div style="margin-top: 56px;">
     {{{body}}}
   </div>
   
@@ -69,22 +72,9 @@
 
   <script src="./static/main.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-  <script
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-  ></script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
-  ></script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"
-  ></script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"
-  ></script>
-  <script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-  ></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
  
-
 </body>
 </html>
