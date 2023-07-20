@@ -15,7 +15,7 @@ app.set("view engine", "hbs");
 const path = require("path");
 const tempelatePath = path.join(__dirname, "../tempelates");
 const TextFile = require("../Models/FileModel");
-const { User } = require("../Models/Users");
+const { User } = require("../Models/User");
 app.use(express.static(path.join(__dirname, "public")));
 app.set("views", tempelatePath);
 const bcrypt = require("bcrypt");
